@@ -60,7 +60,7 @@ window.onload = function() {
         var text = game.add.text( game.world.centerX, 15, "Eat cookies. Use arrow keys.", style );
         text.anchor.setTo( 0.5, 0.0 );
         // change background to white
-        game.stage.backgroundColor = "#ffffff";
+        game.stage.backgroundColor = "#a6aab2";
          // event handler for pichu eating cookie
         bouncy.body.onCollide = new Phaser.Signal();
         bouncy.body.onCollide.add(eatCookie, this);
