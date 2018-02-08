@@ -56,8 +56,8 @@ window.onload = function() {
 
         // Add some text using a CSS style.
         // Center it in X, and position its top 15 pixels from the top of the world.
-        var style = { font: "25px Verdana", fill: "#ff50ff", align: "center" };
-        var text = game.add.text( game.world.centerX, 15, "Eat cookies. Use arrow keys.", style );
+        var style = { font: "25px Verdana", fill: "#7d42f4", align: "center" };
+        var text = game.add.text( game.world.centerX, 15, "Receive kisses. Use arrow keys.", style );
         text.anchor.setTo( 0.5, 0.0 );
         // change background to white
         game.stage.backgroundColor = "#a6aab2";
