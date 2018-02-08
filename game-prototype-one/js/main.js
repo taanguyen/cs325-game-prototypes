@@ -15,7 +15,7 @@ window.onload = function() {
     function preload() {
         // Load an image and call it 'logo'.
         game.load.image( 'logo', 'assets/pichu.png' );
-        game.load.image('cookie', 'assets/cookie.png');
+        game.load.image('cookie', 'assets/blowkiss.png');
         game.load.audio('eaten', 'assets/eaten.mp3');
     }
 
