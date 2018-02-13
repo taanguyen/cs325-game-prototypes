@@ -17,7 +17,9 @@ window.onload = function() {
         game.load.image( 'kitchen', 'assets/kitchen.png');
         this.load.image('ground', 'assets/ground.png');
         game.load.image( 'knife', 'assets/butcher.png');
+        game.load.image('gum', 'assets/pam.png');
         game.load.spritesheet('chicken', 'assets/chicken_crop.png', 47, 46);
+
 
     }
 
@@ -26,6 +28,14 @@ window.onload = function() {
     let butcher;
     var ground;
     let knife;
+    let knives;
+    let text;
+    let style;
+    let knifeMade;
+    let dazed;
+    let gum;
+    let dazedTime;
+    let gumTime;
 
     function create() {
         // add forest background to game
@@ -34,6 +44,10 @@ window.onload = function() {
         chick = game.add.sprite(0, game.world.centerY + 100, 'chicken' );
 
         ground = game.add.sprite(0,445,'ground');
+        knives = [];
+        pam = game.add.sprite(game.world.centerX,445,'pam');
+        pam.anchor.setTo(0,1);
+
 
         //knives = game.add.group();
 
@@ -53,9 +67,14 @@ window.onload = function() {
         // Turn on the arcade physics engine for this sprite.
         game.physics.enable( chick, Phaser.Physics.ARCADE );
         game.physics.enable( ground, Phaser.Physics.ARCADE );
+        game.physics.enable( pam, Phaser.Physics.ARCADE );
 
+
+        chick.body.friction.x = 0.9;
         ground.body.immovable = true;
         ground.body.allowGravity = false;
+          pam.body.immovable = true;
+            pam.body.allowGravity = false;
 
 
         chick.body.collideWorldBounds = true;
@@ -65,31 +84,49 @@ window.onload = function() {
 
         // add keyboard inputs
         cursors = game.input.keyboard.createCursorKeys();
-        game.time.events.repeat(Phaser.Timer.SECOND/2, 10, createKnife, this);
+        //game.time.events.repeat(Phaser.Timer.SECOND/2, 100, createKnife, this);
 
         chick.body.onCollide = new Phaser.Signal();
-        //chick.body.onCollide.add(chickDie(this,knife), this);
+        pam.body.onCollide = new Phaser.Signal();
+
 
         // Add some text using a CSS style.
         // Center it in X, and position its top 15 pixels from the top of the world.
-        var style = { font: "25px Verdana", fill: "#9999ff", align: "center" };
-        var text = game.add.text( game.world.centerX, 15, "Build something amazing.", style );
+        style = { font: "25px Verdana", fill: "#000000", align: "center" };
+        text = game.add.text( game.world.centerX, 15, "Dodge knives.", style );
         text.anchor.setTo( 0.5, 0.0 );
+
+       pam.body.onCollide.add((sprite1, sprite2) => {dazed = true; dazedTime = game.time.now + 2000}, this);
+
+
+
+        knifeMade = game.time.now + 1000;
+
+
     }
 
 
       function createKnife() {
 
-      //  A bouncey ball sprite just to visually see what's going on.
-
       knife = game.add.sprite(game.world.randomX, 0, 'knife');
-
+      knives.push(knife);
       game.physics.enable(knife, Phaser.Physics.ARCADE);
+      knife.body.onCollide = new Phaser.Signal();
+
     //  game.physics.arcade.collide(knife, ground);
 
-
-
+      knife.body.onCollide.add(chickDie, this);
       knife.body.collideWorldBounds = true;
+      knifeMade = game.time.now + 500;
+
+     }
+
+     function chickDie(sprite1, sprite2) {
+       sprite2.kill();// assume chick is sprite2
+       text.destroy();
+       text = game.add.text( game.world.centerX, game.world.centerY, "GAME OVER", style );
+       text.anchor.setTo( 0.5, 0.0 );
+
 
      }
 
@@ -101,23 +138,47 @@ window.onload = function() {
         // new trajectory.
         //bouncy.rotation = game.physics.arcade.accelerateToPointer( chick, game.input.activePointer, 500, 500, 500 );
         //  Reset the players velocity (movement)
+
         chick.body.velocity.x = 0;
         game.physics.arcade.collide(chick, ground);
-        game.physics.arcade.collide(knife, ground);
-        //knives.create( Math.random() * 200,  Math.random() * 30, 0, 'butcher');
+        game.physics.arcade.collide(knives, chick); //check for collision with chick
+        game.physics.arcade.collide(gum, chick);
 
+       // if dazed, you hit gum, so if dazed and gum is not null, then destroy gum
+       //if game time now + offset, if game time now > gum respawn, make new gum
+
+       if(game.time.now > dazedTime){
+         dazed = false;
+       }
+
+
+        if(game.time.now > knifeMade){
+          createKnife();
+
+        }
 
         if (cursors.left.isDown)
         {
             //  Move to the left
-            chick.body.velocity.x = -150;
+            if(dazed){
 
-            chick.animations.play('left');
+              chick.body.velocity.x = -200;
+            }
+            else{
+            chick.body.velocity.x = -350;
+          }
+          chick.animations.play('left');
         }
         else if (cursors.right.isDown)
         {
+          if(dazed){
+
+            chick.body.velocity.x = 200;
+          }
+          else{
             //  Move to the right
-            chick.body.velocity.x = 150;
+            chick.body.velocity.x = 350;
+          }
 
             chick.animations.play('right');
         }

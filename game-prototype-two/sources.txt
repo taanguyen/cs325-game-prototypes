@@ -1,1 +1,3 @@
 chicken: https://i.imgur.com/jODGJn4.png
+
+make immovable platform, keyboard input: https://phaser.io/tutorials/making-your-first-phaser-game/part3
