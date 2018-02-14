@@ -22,60 +22,73 @@ body
 <body>
 <div id="game"></div>
 <div id="readme">
-<h2>Your game title</h2>
+<h2>Chicken Scramble</h2>
 
 <ul>
 <li><strong>Originality:</strong>
-What is original about your game?
+The game has falling objects that can only be avoided rather than maneuvered around. Games I've played typically have obstacles coming at the player horizontally, but this game makes object fall toward the player vertically.
 </li>
 
 <li><strong>Technical Merit:</strong>
-What is interesting about your game technology?
+My previous game generated 5 emkoji sprites in random locations.
+For this game, I was able to generate an infinite number of knives with a time delay between each instantiation of knife.
+The gum also employs a similar "spontaneous generation" mechanism, but it also reduces the chicken's velocity when the chicken collides with the gum.
+The gum appears 100 pixels to the left or right of the chicken (depending on the outcome of Math.random) because I specifically set the x-coordinate of the gum to chick.body.x with the 100 pixel offset.
+Lastly, the chicken has animation!!! When the player moves the chicken left and right, the chicken actually appears to move left and right.
 </li>
 
 <li><strong>Prototype Postmortem:</strong>
-What did you learn from this prototype?
-What was the easiest or hardest part of making it?
+For this game, I learned how to animate sprites using a spritesheet. I also learned how to create sprites on an infinite loop.
+The hardest part of making this game was generating an infinite number of knives. The only way I could think of doing this was by making a phaser time event.
+Luckily, Hu helped me figure out a way to make this process an infinite loop. Shoutout to Hu! Another challenging part of this project was animating the chicken.
+I wasn't familiar with how frames are read off a spritesheet in phaser (for example, which frame is frame 1 vs. frame 6?), so that took a lot of trial and error.
+The easiest part of making this game was adding text!
 </li>
 
 <li><strong>Prototype Assets:</strong>
-Did you make your prototype assets from scratch? Did you borrow them? Cite your sources here.
+I made one asset from scratch using MS Paint- the magenta ground that the chicken walks across! The rest of the assets were borrowed.
 <ul>
-<li>Bouncing Phaser image: <a href="https://phaser.io/download/logo">Phaser logo</a></li>
-<div>Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-</ul>
+<li>Chicken <a href="https://i.imgur.com/jODGJn4.png">Chicken spritesheet</a></li>
+<div>Knife icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+<li>Kitchen <a href="https://www.pinterest.com/pin/485755509790849750/"> background</a></li>
+<li> Gum <a hreef = "https://depositphotos.com/146246961/stock-illustration-splash-of-pink-bubble-gum.html">Gum splash</a></li>
 </li>
-
+</ul>
 <li><strong>Prototype Closest Other Game:</strong>
-Which other game most closely resembles your game? If you are borrowing code from a Phaser Example, you must say so here. If you borrow code from elsewhere, you must say so here.
+My game most closely resembles
+I borrowed keyboard input code from a Phaser tutorial: https://phaser.io/tutorials/making-your-first-phaser-game/part6
 </li>
 
 <li><strong>High Concept:</strong>
-A one-sentence summary of your game.
+The chicken needs to get across the kitchen without being impaled by falling knives.
 </li>
 
 <li><strong>Theme:</strong>
-State which of the Storymatic themes you used.
+The theme I used was chicken!
 </li>
 
 <li><strong>Mandated Variety:</strong>
-State which input, randomness, genre, and play style you used in this prototype.
+The game uses keyboard input and a lot of randomness (knives and gum splashes are randomly generated).
+The genre of this game is side-scroller (although the game doesn't scroll, the camera view is set to side view). The play style is Joker.
+
 </li>
 
 <li><strong>Prototype Goal:</strong>
-What game mechanic is this prototype evaluating?
+The game mechanic is
 </li>
 
 <li><strong>Player Experience Goals:</strong>
-What experience do you want players to have when playing your game?
+I hope players will have fun as they try to dodge the falling knives. It might make players tense up a little while avoiding the dangerous knives.
 </li>
 
 <li><strong>Gameplay:</strong>
-A paragraph describing the actions the player can perform, the system dynamics, and the core mechanic. Include a concise explanation of the prototype’s inputs and their expected effects (how to play). You can also describe game play that is not in the prototype. You may include mock-up images for parts of the game not in the prototype.
+Players can only use the left and right arrow keys to move the chicken across the kitchen. 
 </li>
 
+
 <li><strong>Strategies:</strong>
-What player strategies do you expect will be effective at playing this game?
+The gum can be eliminated in two ways: by bumping into it or simply waiting for it to disappear after a couple seconds.
+To get to the right side of the screen, players can move the chicken right or left to avoid the gum, and charge forward when the coast is clear.
 </li>
 
 <li><strong>Story/Setting/Premise:</strong>
@@ -84,11 +97,11 @@ How will the dramatic tension interact with the gameplay tension?
 </li>
 
 <li><strong>Target Audience:</strong>
-A single sentence that describes the demographic you're trying to reach.
+The game is suitable for young children, ages 11 and under.
 </li>
 
 <li><strong>Play Time:</strong>
-How long does your game take to play?
+The game can be completed within 5 to 30 seconds!
 </li>
 
 </ul>

@@ -18,7 +18,7 @@ window.onload = function() {
         this.load.image('ground', 'assets/ground.png');
         game.load.image( 'knife', 'assets/butcher.png');
         game.load.image('gum', 'assets/gum30.png');
-        game.load.audio('jazz', 'assets/jazz.mp3');
+      //  game.load.audio('jazz', 'assets/jazz.mp3');
         game.load.spritesheet('chicken', 'assets/chicken_crop.png', 47, 46);
 
 
@@ -37,6 +37,7 @@ window.onload = function() {
     let gum;
     let dazedTime;
     let gumTime;
+  //  let sound;
 
     function create() {
         // add forest background to game
@@ -46,8 +47,8 @@ window.onload = function() {
 
         ground = game.add.sprite(0,445,'ground');
         knives = [];
-        sound = game.add.audio('jazz');
-        sound.play();
+      //  sound = game.add.audio('jazz');
+      //  sound.play();
         // gum = game.add.sprite(game.world.centerX,445,'gum');
         // gum.anchor.setTo(0,1);
 
@@ -175,12 +176,19 @@ window.onload = function() {
 
         chick.body.velocity.x = 0;
         game.physics.arcade.collide(chick, ground);
-      //  game.physics.arcade.collide(knives, chick); //check for collision with chick
+        game.physics.arcade.collide(knives, chick); //check for collision with chick
         game.physics.arcade.collide(gum, chick);
 
        // if dazed, you hit gum, so if dazed and gum is not null, then destroy gum
        //if game time now + offset, if game time now > gum respawn, make new gum
        //
+       if(chick.body.blocked.right) {
+         text = game.add.text( game.world.centerX, game.world.centerY, "YOU WON!", style );
+         text.anchor.setTo( 0.5, 0.0 );
+         //game.lockRender = true;
+
+       }
+
        if(game.time.now > gumTime){
          createDestroyGum();
        }
