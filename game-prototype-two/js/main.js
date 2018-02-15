@@ -18,7 +18,7 @@ window.onload = function() {
         this.load.image('ground', 'assets/ground.png');
         game.load.image( 'knife', 'assets/butcher.png');
         game.load.image('gum', 'assets/gum30.png');
-        game.load.audio('jazz', 'assets/jazz_cut.mp3');
+        game.load.audio('jazz', 'assets/jazz.mp3');
         game.load.spritesheet('chicken', 'assets/chicken_crop.png', 47, 46);
 
 
