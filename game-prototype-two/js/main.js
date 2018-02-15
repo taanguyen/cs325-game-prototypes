@@ -18,7 +18,7 @@ window.onload = function() {
         this.load.image('ground', 'assets/ground.png');
         game.load.image( 'knife', 'assets/butcher.png');
         game.load.image('gum', 'assets/gum30.png');
-      //  game.load.audio('jazz', 'assets/jazz.mp3');
+        game.load.audio('jazz', 'assets/jazz_cut.mp3');
         game.load.spritesheet('chicken', 'assets/chicken_crop.png', 47, 46);
 
 
@@ -37,49 +37,32 @@ window.onload = function() {
     let gum;
     let dazedTime;
     let gumTime;
-  //  let sound;
+    let sound;
 
     function create() {
-        // add forest background to game
+        // add kitchen background to game
         game.add.sprite(0, 0, 'kitchen');
         // Create a sprite at the center of the screen using the chicken sprite
         chick = game.add.sprite(0, game.world.centerY + 100, 'chicken' );
 
         ground = game.add.sprite(0,445,'ground');
         knives = [];
-      //  sound = game.add.audio('jazz');
-      //  sound.play();
-        // gum = game.add.sprite(game.world.centerX,445,'gum');
-        // gum.anchor.setTo(0,1);
 
-
-        //knives = game.add.group();
-
-        //knives.create( Math.random() * 200 * (i + 20)/(i*4) + Math.random() * 30 * (i*i), 0, 'butcher');
-
-
-        //butcher = game.add.sprite(game.world.centerX, 0, 'butcher' );
-        // Anchor the sprite at its center, as opposed to its top-left corner.
-        // so it will be truly centered.
         chick.anchor.setTo( 0.5, 0.5 );
         chick.scale.setTo(1.5);
         game.physics.startSystem(Phaser.Physics.ARCADE);
 
-
+        sound = game.add.audio('jazz');
+        sound.play();
         // set gravity
         game.physics.arcade.gravity.y = 200;
         // Turn on the arcade physics engine for this sprite.
         game.physics.enable( chick, Phaser.Physics.ARCADE );
         game.physics.enable( ground, Phaser.Physics.ARCADE );
-      //  game.physics.enable( gum, Phaser.Physics.ARCADE );
-
 
         chick.body.friction.x = 0.9;
         ground.body.immovable = true;
         ground.body.allowGravity = false;
-          // gum.body.immovable = true;
-          //   gum.body.allowGravity = false;
-
 
         chick.body.collideWorldBounds = true;
 
@@ -91,8 +74,6 @@ window.onload = function() {
         //game.time.events.repeat(Phaser.Timer.SECOND/2, 100, createKnife, this);
 
         chick.body.onCollide = new Phaser.Signal();
-        //gum.body.onCollide = new Phaser.Signal();
-
 
         // Add some text using a CSS style.
         // Center it in X, and position its top 15 pixels from the top of the world.
@@ -100,12 +81,6 @@ window.onload = function() {
         text = game.add.text( game.world.centerX, 15, "Dodge knives.", style );
         text.anchor.setTo( 0.5, 0.0 );
 
-
-        // gum.body.onCollide.add((sprite1, sprite2) => {dazed = true; dazedTime = game.time.now + 2000;
-        //   if(dazed && (gum != null)){
-        //      gum.destroy();
-        // }
-        // }, this);
 
 
         knifeMade = game.time.now + 1000;
@@ -129,13 +104,13 @@ window.onload = function() {
       knifeMade = game.time.now + 500;
 
      }
-
+     // make chicken disappear after it's been hit
      function chickDie(sprite1, sprite2) {
        sprite2.kill();// assume chick is sprite2
        text.destroy();
        text = game.add.text( game.world.centerX, game.world.centerY, "GAME OVER", style );
        text.anchor.setTo( 0.5, 0.0 );
-
+       game.paused = true; // end game, pausing makes the game appear as if ended
 
      }
 
@@ -144,6 +119,9 @@ window.onload = function() {
          if(gum != null){
            gum.destroy();
          }
+         // if dazed, you hit gum, so if dazed and gum is not null, then destroy gum
+         //if game time now + offset, if game time now > gum respawn, make new gum
+
          if(game.time.now > gumTime + 2000){
            gum = game.add.sprite((Math.random() > 0.30 ? chick.body.x + 100: chick.body.x - 100),450,'gum');
            gum.anchor.setTo(0,1);
@@ -166,26 +144,18 @@ window.onload = function() {
 
 
     function update() {
-        // Accelerate the 'logo' sprite towards the cursor,
-        // accelerating at 500 pixels/second and moving no faster than 500 pixels/second
-        // in X or Y.
-        // This function returns the rotation angle that makes it visually match its
-        // new trajectory.
-        //bouncy.rotation = game.physics.arcade.accelerateToPointer( chick, game.input.activePointer, 500, 500, 500 );
-        //  Reset the players velocity (movement)
+
 
         chick.body.velocity.x = 0;
         game.physics.arcade.collide(chick, ground);
         game.physics.arcade.collide(knives, chick); //check for collision with chick
         game.physics.arcade.collide(gum, chick);
 
-       // if dazed, you hit gum, so if dazed and gum is not null, then destroy gum
-       //if game time now + offset, if game time now > gum respawn, make new gum
-       //
+
        if(chick.body.blocked.right) {
          text = game.add.text( game.world.centerX, game.world.centerY, "YOU WON!", style );
          text.anchor.setTo( 0.5, 0.0 );
-         //game.lockRender = true;
+         game.paused = true;
 
        }
 
