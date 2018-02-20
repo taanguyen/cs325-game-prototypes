@@ -1,0 +1,5 @@
+ball: http://sonic.wikia.com/wiki/File:Shield_in_Sonic_Runners.png
+star: https://openclipart.org/detail/17032/iconstar
+background: http://i.imgur.com/7whaCrt.jpg
+phaser example:
+key input: https://phaser.io/examples/v2/input/key
