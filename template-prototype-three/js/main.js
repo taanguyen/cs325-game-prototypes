@@ -10,7 +10,7 @@ window.onload = function() {
     // loading functions to reflect where you are putting the assets.
     // All loading functions will typically all be found inside "preload()".
 
-    var game = new Phaser.Game( 800, 600, Phaser.AUTO, 'game', { preload: preload, create: create, update: update } );
+    var game = new Phaser.Game( 800, 600, Phaser.AUTO, 'game', { preload: preload, create: create, update: update, render: render } );
 
     function preload() {
         // Load an image and call it 'logo'.
@@ -18,10 +18,11 @@ window.onload = function() {
         game.load.image('bar', 'assets/bar.png');
         game.load.image('ball', 'assets/ball.png');
         game.load.image('star', 'assets/star.png');
+        game.load.image('dot', 'assets/whitedot.png');
 
     }
 
-    var sky;
+  //  var sky;
     var leftbar;
     var rightbar;
     var ball;
@@ -32,42 +33,58 @@ window.onload = function() {
     var rightD;
     var star; // make a group
     var keys;
+    var oldCenter;
+    var stars;
+
 
     function create() {
-        sky = game.add.sprite(0, 0, 'background');
+        //sky = game.add.sprite(0, 0, 'background');
         // Create a sprite at the center of the screen using the 'logo' image.
+        stars = [];
+        for(var i = 0; i < 1200; i++){
+            stars.push(game.add.image(game.world.randomX, game.world.randomY, 'dot'));
+        }
         ball = game.add.sprite( game.world.centerX, game.world.centerY, 'ball' );
         leftbar = game.add.sprite(200, game.world.centerY, 'bar');
         rightbar = game.add.sprite(600, game.world.centerY, 'bar');
         star = game.add.sprite(250, game.world.centerY, 'star');
         cursors = game.input.keyboard.createCursorKeys();
-        keys = [Phaser.Keyboard.Q, Phaser.Keyboard.W, Phaser.Keyboard.E, Phaser.Keyboard.R];
+        keys = {};
+        oldCenter = ball.world.y;
+
         // set keyboard controls to whatever Math.random generates
+        var i;
+        for(i = Phaser.Keyboard.A; i != Phaser.Keyboard.Z; i++){
+            keys[i] = game.input.keyboard.addKey(i);
+        }
+        keys[Phaser.Keyboard.UP] = game.input.keyboard.addKey(Phaser.Keyboard.UP);
+        keys[Phaser.Keyboard.DOWN] = game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
+        keys[Phaser.Keyboard.LEFT] = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+        keys[Phaser.Keyboard.RIGHT] = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+
 
         ball.anchor.setTo( 0.5, 0.5 );
+        game.camera.follow( ball, 0, 0, 0.5 );
+        game.camera.bounds = null;
         ball.scale.setTo(0.25);
         star.anchor.setTo( 0.5, 0.5 );
         star.scale.setTo(0.05);
         // Turn on the arcade physics engine for this sprite.
         game.physics.startSystem(Phaser.Physics.ARCADE);
         //  Set the world (global) gravity
-        game.physics.arcade.gravity.y = 10;
+        game.physics.arcade.gravity.y;
         game.physics.enable( ball, Phaser.Physics.ARCADE );
         game.physics.enable( leftbar, Phaser.Physics.ARCADE );
         game.physics.enable( rightbar, Phaser.Physics.ARCADE );
         game.physics.enable( star, Phaser.Physics.ARCADE );
 
-        // Make it bounce off of the world bounds.
-        // SET COLLLIDE WORLD TO FALSE LATER
-        ball.body.collideWorldBounds = true;
-        leftbar.body.collideWorldBounds = true;
-        rightbar.body.collideWorldBounds = true;
+
 
         // keyboard controls for right and left bar
-        leftU = game.input.keyboard.addKey(Phaser.Keyboard.W);
-        leftD = game.input.keyboard.addKey(Phaser.Keyboard.S);
-        rightU = game.input.keyboard.addKey(Phaser.Keyboard.UP);
-        rightD = game.input.keyboard.addKey(Phaser.Keyboard.DOWN); // can change orientation later
+        leftU = keys[Phaser.Keyboard.W];
+        leftD = keys[Phaser.Keyboard.S];
+        rightU = keys[Phaser.Keyboard.UP];
+        rightD = keys[Phaser.Keyboard.DOWN];// can change orientation later
 
 
         ball.body.allowGravity = true;
@@ -94,13 +111,13 @@ window.onload = function() {
     function ballHitLeft(ball, leftbar){
       //var diff = 0;
       ball.body.velocity.x = 300;
-      ball.body.velocity.y -= 100;
+      ball.body.velocity.y = -100;
       console.log("hit left");
     }
 
     function ballHitRight(ball, rightbar){
       ball.body.velocity.x = -300;
-      ball.body.velocity.y -= 100;
+      ball.body.velocity.y = -100;
       console.log("hit right");
     }
 
@@ -117,24 +134,52 @@ window.onload = function() {
       console.log("star gone");
     }
 
+    function skyMake(){
+        for(var i = 0; i < 20; i++){
+            stars.push(game.add.image(game.world.randomX, ball.world.y - game.height/2 - game.rnd.realInRange(0, 10), 'dot'));
+        }
+        oldCenter = ball.world.y;
+        for(var j = 0; j < 20; j++){
+          stars[0].destroy();
+          stars.splice(0,1);
+        }
+
+        game.world.bringToTop(leftbar);
+        game.world.bringToTop(rightbar);
+        game.world.bringToTop(ball);
+
+    }
+
+
+
+    function render(){
+      // game.debug.text(game.world.position, 25,25, "#ffffff");
+      // game.debug.text("Ball: " + ball.position, 25,50, "#ffffff");
+      game.debug.text('A'.charCodeAt(0) + 1, 25,50,'#ffffff');
+      //console.log(game.world.position);
+    }
+
 
     function update() {
 
       game.physics.arcade.collide(ball, leftbar, ballHitLeft, null, this);
       game.physics.arcade.collide(ball, rightbar, ballHitRight, null, this);
       game.physics.arcade.collide(ball, star, ballHitStar, null, this);
+      if(ball.world.y - oldCenter < -20){
+        skyMake();
+      }
 
       if(leftU.isDown){
-         leftbar.y -= 5;
+         leftbar.y -= 10;
       }
       if(leftD.isDown){
-        leftbar.y += 5;
+        leftbar.y += 10;
       }
       if(rightU.isDown){
-        rightbar.y -= 5;
+        rightbar.y -= 10;
       }
       if(rightD.isDown){
-        rightbar.y += 5;
+        rightbar.y += 10;
       }
 
 
