@@ -17,8 +17,12 @@ window.onload = function() {
         game.load.image( 'background', 'assets/background.jpg' );
         game.load.image('bar', 'assets/bar.png');
         game.load.image('ball', 'assets/ball.png');
-        game.load.image('star', 'assets/star.png');
+        game.load.image('star', 'assets/star_small.png');
         game.load.image('dot', 'assets/whitedot.png');
+        game.load.image('pink', 'assets/pink.png');
+        game.load.image('blue', 'assets/blue.png');
+        game.load.image('green', 'assets/green.png');
+        game.load.image('purple', 'assets/purple.png');
 
     }
 
@@ -35,6 +39,8 @@ window.onload = function() {
     var keys;
     var oldCenter;
     var stars;
+    var pink, yellow, green, blue;
+    var code, style_text, text_star;
 
 
     function create() {
@@ -48,13 +54,19 @@ window.onload = function() {
         leftbar = game.add.sprite(200, game.world.centerY, 'bar');
         rightbar = game.add.sprite(600, game.world.centerY, 'bar');
         star = game.add.sprite(250, game.world.centerY, 'star');
-        cursors = game.input.keyboard.createCursorKeys();
+        pink = game.add.sprite(400, 80, 'pink');// experimental
+        pink.anchor.setTo(0.5);
+        code = game.rnd.integerInRange(65, 90);
+        style_text = { font: "20px Arial",  fill: "#ffffff", backgroundColor: "#000000" };
+
+        text_star = game.add.text(0, 0, String.fromCharCode(code), style_text);
+        console.log(String.fromCharCode(code));
         keys = {};
         oldCenter = ball.world.y;
 
         // set keyboard controls to whatever Math.random generates
         var i;
-        for(i = Phaser.Keyboard.A; i != Phaser.Keyboard.Z; i++){
+        for(i = Phaser.Keyboard.A; i != (Phaser.Keyboard.Z + 1); i++){
             keys[i] = game.input.keyboard.addKey(i);
         }
         keys[Phaser.Keyboard.UP] = game.input.keyboard.addKey(Phaser.Keyboard.UP);
@@ -68,7 +80,7 @@ window.onload = function() {
         game.camera.bounds = null;
         ball.scale.setTo(0.25);
         star.anchor.setTo( 0.5, 0.5 );
-        star.scale.setTo(0.05);
+        //star.scale.setTo(0.05);
         // Turn on the arcade physics engine for this sprite.
         game.physics.startSystem(Phaser.Physics.ARCADE);
         //  Set the world (global) gravity
@@ -77,6 +89,7 @@ window.onload = function() {
         game.physics.enable( leftbar, Phaser.Physics.ARCADE );
         game.physics.enable( rightbar, Phaser.Physics.ARCADE );
         game.physics.enable( star, Phaser.Physics.ARCADE );
+        game.physics.enable(pink, Phaser.Physics.ARCADE);
 
 
 
@@ -150,6 +163,13 @@ window.onload = function() {
 
     }
 
+    function ballHitPink(){
+
+       rightU = keys[code];
+       pink.destroy();
+       console.log("hit pink");
+    }
+
 
 
     function render(){
@@ -165,6 +185,11 @@ window.onload = function() {
       game.physics.arcade.collide(ball, leftbar, ballHitLeft, null, this);
       game.physics.arcade.collide(ball, rightbar, ballHitRight, null, this);
       game.physics.arcade.collide(ball, star, ballHitStar, null, this);
+      game.physics.arcade.collide(ball, pink, ballHitPink, null, this);
+
+      text_star.x = pink.x - 5;
+      text_star.y = pink.y + (pink.height/2);
+
       if(ball.world.y - oldCenter < -20){
         skyMake();
       }
