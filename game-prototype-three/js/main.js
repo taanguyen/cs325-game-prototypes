@@ -10,19 +10,19 @@ window.onload = function() {
     // loading functions to reflect where you are putting the assets.
     // All loading functions will typically all be found inside "preload()".
 
-    var game = new Phaser.Game( 800, 600, Phaser.AUTO, 'game', { preload: preload, create: create, update: update, render: render } );
+    var game = new Phaser.Game( 800, 600, Phaser.AUTO, 'game', { preload: preload, create: create, update: update} );
 
     function preload() {
         // Load an image and call it 'logo'.
         game.load.image( 'background', 'assets/background.jpg' );
         game.load.image('bar', 'assets/bar.png');
         game.load.image('ball', 'assets/ball.png');
-        game.load.image('star', 'assets/star_small.png');
+        game.load.image('star (1)', 'assets/star (1).png');
+        game.load.image('star (2)', 'assets/star (2).png');
+        game.load.image('star (3)', 'assets/star (3).png');
+        game.load.image('star (4)', 'assets/star (4).png');
+        game.load.image('star (5)', 'assets/star (5).png');
         game.load.image('dot', 'assets/whitedot.png');
-        game.load.image('pink', 'assets/pink.png');
-        game.load.image('blue', 'assets/blue.png');
-        game.load.image('green', 'assets/green.png');
-        game.load.image('purple', 'assets/purple.png');
 
     }
 
@@ -35,32 +35,105 @@ window.onload = function() {
     var leftD;
     var rightU;
     var rightD;
-    var star; // make a group
+    var star, stars; // make a group
     var keys;
     var oldCenter;
-    var stars;
-    var pink, yellow, green, blue;
-    var code, style_text, text_star;
+    var dots;
 
+    var leftbound, rightbound;
+    var points;
+    var starSpawn;
+    var pointsText;
+
+    // user controls
+    var leftUText, leftDText, rightUText, rightDText;
+
+    class Star {
+      constructor() {
+        this.i = game.rnd.integerInRange(1,5);
+        this.image =  game.add.sprite(game.rnd.integerInRange(leftbound + 50, rightbound - 50),
+        ball.position.y - game.rnd.integerInRange(game.height, game.height * 1.5), 'star (' + this.i + ')');
+        this.text = game.add.text(this.image.position.x, this.image.position.y - 20, "",
+         {
+           fontSize: 20,
+           fill: "#ffffff"
+         });
+        game.physics.arcade.enable(this.image);
+        this.image.body.immovable = true;
+        this.image.body.allowGravity = false;
+        game.world.bringToTop(this.image);
+
+        this.code = game.rnd.integerInRange(65,90);
+        if(this.i != 1){
+          this.text.setText(String.fromCharCode(this.code));
+
+        }
+      }
+
+      changePaddleKey(ball){
+          if(new Phaser.Rectangle(ball.position.x, ball.position.y, ball.width, ball.height).intersects(
+            new Phaser.Rectangle(this.image.x, this.image.y, this.image.width, this.image.height))){
+              ball.body.velocity.setMagnitude(0.7*ball.body.velocity.getMagnitude());
+              switch(this.i){
+                  case 2:
+                    leftU = keys[this.code];
+                    break;
+                  case 3:
+                    leftD = keys[this.code];
+                    break;
+                  case 4:
+                    rightU = keys[this.code];
+                    break;
+                  case 5:
+                    rightD = keys[this.code];
+                    break;
+              }
+              points++;
+              return true;
+          }
+          return false;
+      }
+
+      destroy(){
+          this.image.destroy();
+          this.text.destroy();
+      }
+
+    getText(){
+        return String.fromCharCode(code);
+      }
+
+    }
 
     function create() {
         //sky = game.add.sprite(0, 0, 'background');
         // Create a sprite at the center of the screen using the 'logo' image.
-        stars = [];
+        dots = [];
+        points = 0;
+        starSpawn = 0;
+        leftbound = 50;
+        rightbound = 750;
         for(var i = 0; i < 1200; i++){
-            stars.push(game.add.image(game.world.randomX, game.world.randomY, 'dot'));
-        }
+            dots.push(game.add.image(game.world.randomX, game.world.randomY, 'dot'));
+        } // make the night sky look
         ball = game.add.sprite( game.world.centerX, game.world.centerY, 'ball' );
-        leftbar = game.add.sprite(200, game.world.centerY, 'bar');
-        rightbar = game.add.sprite(600, game.world.centerY, 'bar');
-        star = game.add.sprite(250, game.world.centerY, 'star');
-        pink = game.add.sprite(400, 80, 'pink');// experimental
-        pink.anchor.setTo(0.5);
-        code = game.rnd.integerInRange(65, 90);
-        style_text = { font: "20px Arial",  fill: "#ffffff", backgroundColor: "#000000" };
+        leftbar = game.add.sprite(leftbound, game.world.centerY, 'bar');
+        rightbar = game.add.sprite(rightbound, game.world.centerY, 'bar');
+        stars = [];
 
-        text_star = game.add.text(0, 0, String.fromCharCode(code), style_text);
-        console.log(String.fromCharCode(code));
+        leftUText = game.add.text(0,0,"", {fontSize:20, backgroundColor: "#0079f2"}); //blue
+        leftDText = game.add.text(0,50,"",{fontSize:20, backgroundColor: "#00b359"}); // green
+        rightUText = game.add.text(175, 0,"",{fontSize:20, backgroundColor: "#ff80bf"}); //pink
+        rightDText = game.add.text(175, 50,"",{fontSize:20, backgroundColor: "#800080"});// purple
+        pointsText = game.add.text(game.world.centerX, 50,"",{fontSize:20, fill: "#ffffff"});// points
+
+
+        leftUText.fixedToCamera = true;
+        leftDText.fixedToCamera = true;
+        rightUText.fixedToCamera = true;
+        rightDText.fixedToCamera = true;
+        pointsText.fixedToCamera = true;
+
         keys = {};
         oldCenter = ball.world.y;
 
@@ -69,17 +142,12 @@ window.onload = function() {
         for(i = Phaser.Keyboard.A; i != (Phaser.Keyboard.Z + 1); i++){
             keys[i] = game.input.keyboard.addKey(i);
         }
-        keys[Phaser.Keyboard.UP] = game.input.keyboard.addKey(Phaser.Keyboard.UP);
-        keys[Phaser.Keyboard.DOWN] = game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
-        keys[Phaser.Keyboard.LEFT] = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
-        keys[Phaser.Keyboard.RIGHT] = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
-
 
         ball.anchor.setTo( 0.5, 0.5 );
         game.camera.follow( ball, 0, 0, 0.5 );
         game.camera.bounds = null;
         ball.scale.setTo(0.25);
-        star.anchor.setTo( 0.5, 0.5 );
+
         //star.scale.setTo(0.05);
         // Turn on the arcade physics engine for this sprite.
         game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -88,16 +156,15 @@ window.onload = function() {
         game.physics.enable( ball, Phaser.Physics.ARCADE );
         game.physics.enable( leftbar, Phaser.Physics.ARCADE );
         game.physics.enable( rightbar, Phaser.Physics.ARCADE );
-        game.physics.enable( star, Phaser.Physics.ARCADE );
-        game.physics.enable(pink, Phaser.Physics.ARCADE);
+
 
 
 
         // keyboard controls for right and left bar
         leftU = keys[Phaser.Keyboard.W];
         leftD = keys[Phaser.Keyboard.S];
-        rightU = keys[Phaser.Keyboard.UP];
-        rightD = keys[Phaser.Keyboard.DOWN];// can change orientation later
+        rightU = keys[Phaser.Keyboard.I];
+        rightD = keys[Phaser.Keyboard.K];// can change orientation later
 
 
         ball.body.allowGravity = true;
@@ -105,8 +172,6 @@ window.onload = function() {
         leftbar.body.allowGravity = false;
         rightbar.body.immovable = true;
         rightbar.body.allowGravity = false;
-        star.body.immovable = true;
-        star.body.allowGravity = false;
 
         ball.body.velocity.setTo(150,40);
       //  ball.body.bounce.setTo(1,1);
@@ -117,7 +182,7 @@ window.onload = function() {
         // Add some text using a CSS style.
         // Center it in X, and position its top 15 pixels from the top of the world.
         var style = { font: "25px Verdana", fill: "#9999ff", align: "center" };
-        var text = game.add.text( game.world.centerX, 15, "Build something amazing.", style );
+        var text = game.add.text( game.world.centerX, 15, "Collect Stars. Earn Points!", style );
         text.anchor.setTo( 0.5, 0.0 );
     }
 
@@ -125,36 +190,25 @@ window.onload = function() {
       //var diff = 0;
       ball.body.velocity.x = 300;
       ball.body.velocity.y = -100;
-      console.log("hit left");
+
     }
 
     function ballHitRight(ball, rightbar){
       ball.body.velocity.x = -300;
       ball.body.velocity.y = -100;
-      console.log("hit right");
+
     }
 
-    function ballHitStar(ball, star){
-      var diff = ball.body.x - star.body.y;
-      if(diff < 0){ // ball hit star on left side
-        ball.body.velocity.x = 200;
-      }
-      else{
-        ball.body.velocity.x = -200;
-      }
 
-      star.destroy();
-      console.log("star gone");
-    }
 
     function skyMake(){
         for(var i = 0; i < 20; i++){
-            stars.push(game.add.image(game.world.randomX, ball.world.y - game.height/2 - game.rnd.realInRange(0, 10), 'dot'));
+            dots.push(game.add.image(game.world.randomX, ball.world.y - game.height/2 - game.rnd.realInRange(0, 10), 'dot'));
         }
         oldCenter = ball.world.y;
         for(var j = 0; j < 20; j++){
-          stars[0].destroy();
-          stars.splice(0,1);
+          dots[0].destroy();
+          dots.splice(0,1);
         }
 
         game.world.bringToTop(leftbar);
@@ -163,47 +217,71 @@ window.onload = function() {
 
     }
 
-    function ballHitPink(){
 
-       rightU = keys[code];
-       pink.destroy();
-       console.log("hit pink");
+
+
+
+    function destroyStarsBelowScreen(){ // get rid of stars off screen
+      stars.forEach(function(star){
+          if(star.image.position.y > (game.world.centerY - (0.5*game.world.height))){
+            star.destroy();
+            stars.splice(stars.indexOf(star), 1);
+          }
+      });
     }
 
 
-
-    function render(){
-      // game.debug.text(game.world.position, 25,25, "#ffffff");
-      // game.debug.text("Ball: " + ball.position, 25,50, "#ffffff");
-      game.debug.text('A'.charCodeAt(0) + 1, 25,50,'#ffffff');
-      //console.log(game.world.position);
-    }
 
 
     function update() {
+      if(ball.world.y - oldCenter < -20){
+        skyMake();
+        destroyStarsBelowScreen();
+      }
 
       game.physics.arcade.collide(ball, leftbar, ballHitLeft, null, this);
       game.physics.arcade.collide(ball, rightbar, ballHitRight, null, this);
-      game.physics.arcade.collide(ball, star, ballHitStar, null, this);
-      game.physics.arcade.collide(ball, pink, ballHitPink, null, this);
 
-      text_star.x = pink.x - 5;
-      text_star.y = pink.y + (pink.height/2);
+      // update UI
+      leftUText.setText("Left UP: " + String.fromCharCode(leftU.keyCode) + "  ");
+      leftDText.setText("Left DOWN: " + String.fromCharCode(leftD.keyCode)+ "  ");
+      rightUText.setText("Right UP: " + String.fromCharCode(rightU.keyCode) + "  ");
+      rightDText.setText("Right DOWN: " + String.fromCharCode(rightD.keyCode) + "  ");
+      pointsText.setText("POINTS: " + points);
 
-      if(ball.world.y - oldCenter < -20){
-        skyMake();
+      if(ball.position.x < 0 || ball.position.x > game.width){
+          let centerText = game.add.text(game.world.width/2,game.world.height/2,"GAME OVER", {fill:"#ffff50"});
+          centerText.fixedToCamera = true;
+          centerText.anchor.setTo(0.5);
+          game.physics.arcade.isPause = true;
       }
+
+
+      if(game.time.now >= starSpawn){
+        stars.push(new Star());
+        starSpawn = 2000 + game.time.now;
+      }
+
+      for(var i = 0; i  < stars.length; i++){
+          if(stars[i].changePaddleKey(ball)){
+            stars[i].destroy();
+            stars.splice(i, 1);
+            break;
+          }
+      }
+
+
 
       if(leftU.isDown){
          leftbar.y -= 10;
       }
-      if(leftD.isDown){
+      else if(leftD.isDown){
         leftbar.y += 10;
       }
       if(rightU.isDown){
         rightbar.y -= 10;
       }
-      if(rightD.isDown){
+      else if(rightD.isDown){
         rightbar.y += 10;
       }
 
