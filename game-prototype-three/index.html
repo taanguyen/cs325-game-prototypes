@@ -26,68 +26,78 @@ body
 
 <ul>
 <li><strong>Originality:</strong>
-What is original about your game?
+  Most games with ball and paddle that I've seen have a single paddle. This game uses two paddles, and two sets of controls that vary
+  while playing the game.
 </li>
 
 <li><strong>Technical Merit:</strong>
-What is interesting about your game technology?
+When a player hits a star that has a letter,
+the game control with the same color as the star changes to the key of the letter above the star.
+For example, hitting a pink star with 'K' above it means the rightbar UP control is now the K key.
+Another feature of the game is the UI, and the illusion that the game extends infinitely upward.
+The night sky is also constantly generating background stars, as the camera fixates on the ball.
 </li>
 
 <li><strong>Prototype Postmortem:</strong>
-What did you learn from this prototype?
-What was the easiest or hardest part of making it?
+I learned a lot from this game! I learned how to make a class in JS, how to fixate objects on the screen, using the camera.
+I also learned how to continuously generate sprites, while simultenously deleting sprites to save memory. I learned how to
+manipulate keys, as they are really just integers, in phaser.
+The hardest part of this game was making the stars, and making interactions with the stars. The text associated to the star
+changes gameplay.
 </li>
 
 <li><strong>Prototype Assets:</strong>
-Did you make your prototype assets from scratch? Did you borrow them? Cite your sources here.
+I made the left and right paddles. I also made the background dots. The following sprites were borrowed:
 <ul>
-<li>Bouncing Phaser image: <a href="https://phaser.io/download/logo">Phaser logo</a></li>
-</ul>
+<li>Ball: <a href="http://sonic.wikia.com/wiki/File:Shield_in_Sonic_Runners.png">Ball</a></li>
+</ul>Star: <a href="https://openclipart.org/detail/17032/iconstar">Star</a></li>
 </li>
 
 <li><strong>Prototype Closest Other Game:</strong>
-Which other game most closely resembles your game? If you are borrowing code from a Phaser Example, you must say so here. If you borrow code from elsewhere, you must say so here.
+The game that most closely resembles my game is the classic brick breaker/ pong game.
 </li>
 
 <li><strong>High Concept:</strong>
-A one-sentence summary of your game.
+Collect stars by getting the ball to hit the stars; game ends if the ball flies off to the left or right.
 </li>
 
 <li><strong>Theme:</strong>
-State which of the Storymatic themes you used.
+Stargazing
 </li>
 
 <li><strong>Mandated Variety:</strong>
-State which input, randomness, genre, and play style you used in this prototype.
+
+Play style : collector, randomness: lots of randomly placed stars, deterministic in that players can aim for the stars, input: keyboard, genre: (vertical) side-scroller
 </li>
 
 <li><strong>Prototype Goal:</strong>
-What game mechanic is this prototype evaluating?
+The game mechanic of this prototype involves hitting a ball left and right to win collectable stars. Ss player advances in the game, keyboard controls change.
 </li>
 
 <li><strong>Player Experience Goals:</strong>
-What experience do you want players to have when playing your game?
+Players hopefully have fun, maybe they experience frustration as they get used to the changing keyboard controls!
 </li>
 
 <li><strong>Gameplay:</strong>
-A paragraph describing the actions the player can perform, the system dynamics, and the core mechanic. Include a concise explanation of the prototype’s inputs and their expected effects (how to play). You can also describe game play that is not in the prototype. You may include mock-up images for parts of the game not in the prototype.
+Using the two left and right paddles, a player can collect stars to win points. The goal is to earn as many points as possible by moving the paddles up and down.
+The best stars to collect are the yellow ones. Collecting other stars will change the keyboard controls. If the ball floats off to the left or right world bounds, the game is over.
 </li>
 
 <li><strong>Strategies:</strong>
-What player strategies do you expect will be effective at playing this game?
+Keeping the ball in motion is a tough challenge. One strategy to avoid keyboard changes is to aim for the yellow stars.
 </li>
 
 <li><strong>Story/Setting/Premise:</strong>
-A paragraph about the world your game is set in and who the characters are. What makes the game world and its occupants unique and interesting? Do the tokens represent something? If the game has a backstory, mention it here. If the game is abstract, then say so.
-How will the dramatic tension interact with the gameplay tension?
+The game is abstract and there are no characters. The ball is simply lost in space, in a universe where there is no gravity,
+and stars are of multiple colors. 
 </li>
 
 <li><strong>Target Audience:</strong>
-A single sentence that describes the demographic you're trying to reach.
+Audience is anyone ages 8 and up.
 </li>
 
 <li><strong>Play Time:</strong>
-How long does your game take to play?
+Anywhere from 10 seconds to several minutes (based on skill level).
 </li>
 
 </ul>
