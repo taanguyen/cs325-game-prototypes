@@ -1,0 +1,2 @@
+sounds array code: 
+https://stackoverflow.com/questions/43424355/waiting-for-a-sound-to-stop-before-playing-the-next-sound
