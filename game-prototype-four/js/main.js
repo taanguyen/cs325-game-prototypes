@@ -158,12 +158,18 @@ window.onload = function() {
          }
        }
 
-// show positions to add images to 
+// show positions to add images to
     function showOptions(){
       // show options
-      repeat.destroy();
-      yes.destroy();
-      no.destroy();
+      if(repeat != null){
+        repeat.destroy();
+      }
+      if(yes != null){
+        yes.destroy();
+      }
+      if(no != null){
+        no.destroy();
+      }
       for(var i = 0; i < sprites.length; i++){
         game.add.tween(sprites[i]).to( { alpha: 1 }, 3000, Phaser.Easing.Linear.None, true);
         sprites[i].inputEnabled = true;
