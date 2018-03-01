@@ -47,6 +47,9 @@ window.onload = function() {
     var submit;
     var submissionArray;
     var background;
+    var unlocked, not_played;
+    var no, yes, repeat;
+
 
     function create() {
 
@@ -73,6 +76,7 @@ window.onload = function() {
         windchimes.alpha = 0;
         traindoor = game.add.sprite(0, spriteHeight, 'traindoor_img');
         traindoor.alpha = 0;
+        traindoor.scale.setTo(0.9);
         opera = game.add.sprite(0, spriteHeight,'opera_img');
         opera.alpha = 0;
 
@@ -96,9 +100,10 @@ window.onload = function() {
         style = { font: "25px Verdana", fill: "	#ffffff", align: "center" , stroke: "#000000", strokeThickness: 3}; // text formatting
         soundsArray = [sax_audio, typewriter_audio, windchimes_audio, traindoor_audio, opera_audio];
         Phaser.ArrayUtils.shuffle(soundsArray);
-        playSequence(soundsArray); // ADD BACK IN AFTER TESTINGS
 
-
+        not_played = true;
+        playSequence(soundsArray);
+        // an array of numbers identical to numbers that appear in the beginning
         orderTextPositions = [];
 
         var textHeight = height - 300;
@@ -107,14 +112,15 @@ window.onload = function() {
             orderTextPositions[i].alpha = 0;
 
         }
-        submit = game.add.text(game.world.centerX, 60, " SUBMIT ", style);
+        // submit button, appears only when player has made complete selection
+        submit = game.add.text(game.world.centerX, 100, " SUBMIT ", style);
         submit.visible = false;
         submit.inputEnabled = true;
         submit.events.onInputUp.add(checkSubmission, this);
         var text = game.add.text( game.world.centerX, 15, "Listen Carefully.", style );
         text.anchor.setTo( 0.5, 0.0 );
     }
-
+// submissionArray should match soundsArray if player is successful
     function removeImg(image){
       for(var i = 0; i < sprites.length; i++){
           if(submissionArray[i] == image){
@@ -123,6 +129,7 @@ window.onload = function() {
       }
     }
 
+// make right click play sound associated with image
     function playSound(image, pointer, boolean){
       for(var i = 0; i < soundsArray.length; i++){
         soundsArray[i].stop();
@@ -132,6 +139,7 @@ window.onload = function() {
       }
     }
 
+// make a snap to place action with images
     function dragToNum(image){
        textRectangle  = new Phaser.Rectangle(image.x - (image.width/2) - 13, image.y - (image.height/2) - 13 , image.width + 13, image.height + 13);
        for(var i = 0; i < sprites.length; i++){
@@ -150,8 +158,12 @@ window.onload = function() {
          }
        }
 
+// show positions to add images to 
     function showOptions(){
       // show options
+      repeat.destroy();
+      yes.destroy();
+      no.destroy();
       for(var i = 0; i < sprites.length; i++){
         game.add.tween(sprites[i]).to( { alpha: 1 }, 3000, Phaser.Easing.Linear.None, true);
         sprites[i].inputEnabled = true;
@@ -163,19 +175,40 @@ window.onload = function() {
       }
     }
 
+    function askRepeat(){
+        if(not_played){
+        repeat = game.add.text(game.world.centerX, 200, "Replay once?", style);
+        yes =  game.add.text(game.world.centerX - 30, 250, "Yes", style);
+        no =  game.add.text(game.world.centerX + 30, 250, "No", style);
+        yes.inputEnabled = true;
+        no.inputEnabled = true;
+        yes.events.onInputUp.add(function(){
+          playSequence(soundsArray);
+          repeat.destroy();
+          yes.destroy();
+          no.destroy();
+
+        }, this);
+        no.events.onInputUp.add(showOptions, this);
+        not_played = false;
+      }
+    }
+
     function playSequence(soundArray) {
     soundArray[0].play();
-    game.add.text(40, 150, "1", style);
+    game.add.text(sprites[0].x, 150, "1", style);
     soundArray.forEach(function(element, index, array) {
         if (soundArray[index + 1]) {
             soundArray[index].onStop.addOnce(function() {
                 soundArray[index + 1].play();
-                game.add.text((150 * (index + 1)) + 60, 150, " " + (index + 2), style);
-                if(index + 2 == array.length){
-                  soundArray[index+1].onStop.addOnce(showOptions);
+                game.add.text(orderTextPositions[index + 1].x, 150, " " + (index + 2), style);
+                if(index + 2 == array.length && not_played){
+                  soundArray[index + 1].onStop.addOnce(askRepeat);
+                  }
+                else if(index + 2 == array.length && !not_played){
+                  soundArray[index + 1].onStop.addOnce(showOptions);
                 }
               }, this);
-
             }
         });
 

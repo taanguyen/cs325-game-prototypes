@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Hello! Amaze!</title>
+    <title>Musical Memory!</title>
     <script src="js/phaser.js"></script>
     <script src="js/main.js"></script>
 
@@ -26,68 +26,81 @@ body
 
 <ul>
 <li><strong>Originality:</strong>
-What is original about your game?
+My game involves memorizing a random sequence of sounds and then repeating the sequence in order perfectly. I've only ever played memory games that involve
+finding matching cards, so I hope this idea is original!
 </li>
 
 <li><strong>Technical Merit:</strong>
-What is interesting about your game technology?
+For this game, I implemented a few features: tweens to display numbers and sprites, drag and drop with snap-to-place action, left-clicking on a sprite enables dragging while right-clicking
+on a sprite replays the sound associated with the sprite. I also made text buttons for the first time. The submit button changes to visible when the player
+is ready to submit an answer, and the repeat button allows the player to hear the sequence one more time.
 </li>
 
 <li><strong>Prototype Postmortem:</strong>
-What did you learn from this prototype?
-What was the easiest or hardest part of making it?
+I learned a lot making this prototype! I learned how to make drag and drop interaction, I learned to use Phaser's shuffle method, how to play sounds in sequence (at first, the sounds kept playing all at once), and I
+learned how to capture mouse clicking to make the right and left clicks distinct events. I also used tweens for the first time.
+The hardest part of making this game, aside from getting the sounds to play in sequence (spent hours on this!! eventually resorted to internet forum), was getting the snap-to-place action to happen correctly. I used a distance checking method orginally and it wasn't working. Before this, I only
+ever did collision checking between two sprites. The snap-to-place feature was implemented using .contains() and Phaser rectangle.
 </li>
 
 <li><strong>Prototype Assets:</strong>
-Did you make your prototype assets from scratch? Did you borrow them? Cite your sources here.
 <ul>
-<li>Bouncing Phaser image: <a href="https://phaser.io/download/logo">Phaser logo</a></li>
+<li>: Typewriter <a href="flaticon.com/search?word=typewriter">Typewriter</a></li>
+<li>: Opera <a href="flaticon.com/search?word=opera">Opera</a></li>
+<li>: Bell <a href="flaticon.com/search?word=bell">Bell</a></li>
+<li>: Wind Chimes <a href="flaticon.com/search?word=chimes"> Wind Chimes </a></li>
+<li>: Sax <a href="flaticon.com/search?word=sax">Sax</a></li>
+<li>: Background <a href="http://images.all-free-download.com/images/graphiclarge/red_stage_curtain_hd_picture_165757.jpg">Background</a></li>
+<li>: Freesound audio clips <a href="https://freesound.org/browse/">FreeSound Audio Clips</a></li>
 </ul>
 </li>
 
 <li><strong>Prototype Closest Other Game:</strong>
-Which other game most closely resembles your game? If you are borrowing code from a Phaser Example, you must say so here. If you borrow code from elsewhere, you must say so here.
+Sound playing in sequence: https://stackoverflow.com/questions/43424355/waiting-for-a-sound-to-stop-before-playing-the-next-sound
+This game is closest to card matching games and the physical Simon game with sound (though I didn't know about the Simon game when I came up with this idea).
 </li>
 
 <li><strong>High Concept:</strong>
-A one-sentence summary of your game.
+Put the images in the same order as the sequence of sounds.
 </li>
 
 <li><strong>Theme:</strong>
-State which of the Storymatic themes you used.
+Soap Opera Addict
 </li>
 
 <li><strong>Mandated Variety:</strong>
-State which input, randomness, genre, and play style you used in this prototype.
+input: mouse; randomness: lots of randomness because the sounds are randomly shuffled every round; play style: Craftsman; genre: memory testing
 </li>
 
 <li><strong>Prototype Goal:</strong>
-What game mechanic is this prototype evaluating?
+The mechanic involved in this game is short-term memory/ auditory memory. The interaction mechanic is drag and drop, with distinct right and left mouse clicks.
 </li>
 
 <li><strong>Player Experience Goals:</strong>
-What experience do you want players to have when playing your game?
+Overall fun and enjoyable experience; a bit of frustration if the player loses.
 </li>
 
 <li><strong>Gameplay:</strong>
-A paragraph describing the actions the player can perform, the system dynamics, and the core mechanic. Include a concise explanation of the prototype’s inputs and their expected effects (how to play). You can also describe game play that is not in the prototype. You may include mock-up images for parts of the game not in the prototype.
+Players will hear a sequence of randomly shuffled sounds. They can click on yes to hear the sounds again, but only one more time.
+To win the game, players must drag and drop the images to their corresponding locations in the auditory sequence (if the opera audio clip happened first, place the opera masks on number 1).
+Once all 6 images have been placed, hit SUBMIT.
 </li>
 
 <li><strong>Strategies:</strong>
-What player strategies do you expect will be effective at playing this game?
+There isn't really any strategy in this game. Players may write down the sequence as it is heard, but that would defeat the purpose of this game :(
 </li>
 
 <li><strong>Story/Setting/Premise:</strong>
-A paragraph about the world your game is set in and who the characters are. What makes the game world and its occupants unique and interesting? Do the tokens represent something? If the game has a backstory, mention it here. If the game is abstract, then say so.
-How will the dramatic tension interact with the gameplay tension?
+The composer for the hit soap opera, Days of Our Lives in CS 325, needs original content for the show! But he's having trouble remembering
+what parts go where. It's up to you to help him out!
 </li>
 
 <li><strong>Target Audience:</strong>
-A single sentence that describes the demographic you're trying to reach.
+Anyone ages 6 and up.
 </li>
 
 <li><strong>Play Time:</strong>
-How long does your game take to play?
+1 to 2 minutes
 </li>
 
 </ul>
