@@ -33,7 +33,7 @@ window.onload = function() {
     var ratioCheese, ratioTomato, ratioLettuce;
 
     function preload() {
-        //game.load.script('VisualTimer.js');
+        
 
         game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
         game.load.image('instructions', 'assets/instructions.png');
