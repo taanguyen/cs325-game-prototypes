@@ -33,7 +33,7 @@ window.onload = function() {
     var ratioCheese, ratioTomato, ratioLettuce;
 
     function preload() {
-        
+
 
         game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
         game.load.image('instructions', 'assets/instructions.png');
@@ -183,6 +183,7 @@ window.onload = function() {
 
     function calculateScore(){
       let maxSandwich = Math.floor(Math.min(tomatoAmount/ratioTomato, cheeseAmount/ratioCheese, lettuceAmount/ratioLettuce));
+      var maxSandwichText = game.add.text(game.world.centerX - 45, 150, "Total sandwiches: " + maxSandwich, {font: "25px Arial", fill: "#fff"});
       let excessTomato = tomatoAmount - (maxSandwich * ratioTomato);
       let excessCheese = cheeseAmount - (maxSandwich * ratioCheese);
       let excessLettuce = lettuceAmount - (maxSandwich * ratioLettuce);
@@ -195,6 +196,7 @@ window.onload = function() {
       //      "\nLettuce:      " + ratioLettuce+"                     " + lettuceAmount + "                    " + excessLettuce +
       //
       //      "\nScore = (3 * total sandwiches)  - total excess = " + score, style);
+
 
 
       var headings = [ "    ", 'Ratio', 'Amount', 'Excess'];
