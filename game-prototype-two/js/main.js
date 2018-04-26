@@ -27,6 +27,7 @@ window.onload = function() {
     var chick;
     var cursors;
     let butcher;
+
     var ground;
     let knife;
     let knives;
