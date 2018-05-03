@@ -184,7 +184,7 @@ window.onload = function() {
       replay.events.onInputDown.add(() => {
         currentLevel = 1;
         game.destroy();
-        game = new Phaser.Game( 800, 750, Phaser.AUTO, 'game', { preload: preload, create: create, update: update} );
+        game = new Phaser.Game( 800, 800, Phaser.AUTO, 'game', { preload: preload, create: create, update: update} );
       }, this);
     }
 
